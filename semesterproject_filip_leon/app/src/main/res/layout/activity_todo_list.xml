@@ -9,8 +9,26 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Todo Liste"
+            android:text="Todo List"
             android:textSize="24sp" />
+
+    <Button
+            android:id="@+id/buttonAddTodo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add todo" />
+
+    <Button
+            android:id="@+id/buttonSortByDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sort by date" />
+
+    <Button
+            android:id="@+id/buttonFavoritesFirst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Favorites first" />
 
     <ListView
             android:id="@+id/todoListView"

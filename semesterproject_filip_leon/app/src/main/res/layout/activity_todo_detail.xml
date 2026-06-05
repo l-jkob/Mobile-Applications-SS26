@@ -1,16 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/detailText"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Detailansicht"
-            android:textSize="24sp"/>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-</LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Todo Details"
+                android:textSize="24sp" />
+
+        <EditText
+                android:id="@+id/editTodoName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name" />
+
+        <EditText
+                android:id="@+id/editTodoDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description"
+                android:minLines="3" />
+
+        <Button
+                android:id="@+id/buttonDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select date" />
+
+        <Button
+                android:id="@+id/buttonTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select time" />
+
+        <CheckBox
+                android:id="@+id/checkDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done" />
+
+        <CheckBox
+                android:id="@+id/checkFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favorite" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Linked Contacts"
+                android:textSize="18sp"
+                android:paddingTop="12dp" />
+
+        <TextView
+                android:id="@+id/textLinkedContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No contacts selected"
+                android:textColor="#777777"
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp" />
+
+        <Button
+                android:id="@+id/buttonContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Contacts" />
+
+        <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+        <Button
+                android:id="@+id/buttonDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete" />
+
+    </LinearLayout>
+</ScrollView>

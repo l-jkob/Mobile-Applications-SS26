@@ -1,3 +1,7 @@
+package com.example.myapplication;
+
+import java.util.ArrayList;
+
 public class Todo {
 
     private int id;
@@ -7,6 +11,7 @@ public class Todo {
     private boolean favorite;
     private String dueDate;
     private String dueTime;
+    private ArrayList<String> linkedContacts;
 
     public Todo(int id, String name, String description, boolean done, boolean favorite, String dueDate, String dueTime) {
         this.id = id;
@@ -16,61 +21,40 @@ public class Todo {
         this.favorite = favorite;
         this.dueDate = dueDate;
         this.dueTime = dueTime;
+        this.linkedContacts = new ArrayList<>();
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescription() { return description; }
 
-    public boolean isDone() {
-        return done;
-    }
+    public boolean isDone() { return done; }
 
-    public boolean isFavorite() {
-        return favorite;
-    }
+    public boolean isFavorite() { return favorite; }
 
-    public String getDueDate() {
-        return dueDate;
-    }
+    public String getDueDate() { return dueDate; }
 
-    public String getDueTime() {
-        return dueTime;
-    }
+    public String getDueTime() { return dueTime; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public ArrayList<String> getLinkedContacts() { return linkedContacts; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setId(int id) { this.id = id; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setName(String name) { this.name = name; }
 
-    public void setDone(boolean done) {
-        this.done = done;
-    }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
+    public void setDone(boolean done) { this.done = done; }
 
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
-    }
+    public void setFavorite(boolean favorite) { this.favorite = favorite; }
 
-    public void setDueTime(String dueTime) {
-        this.dueTime = dueTime;
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
+
+    public void setDueTime(String dueTime) { this.dueTime = dueTime; }
+
+    public void setLinkedContacts(ArrayList<String> linkedContacts) {
+        this.linkedContacts = linkedContacts;
     }
 }
