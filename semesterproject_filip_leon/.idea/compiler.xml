@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="maas-26s-e06-dataremote_05214fb2999d.backend" target="1.8" />
+      <module name="maas-26s-e06-dataremote_05214fb2999d.backend.main" target="1.8" />
+      <module name="maas-26s-e06-dataremote_05214fb2999d.backend.test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Todo {
+public class Todo implements Serializable {
 
-    private int id;
+    private long id;
+
+    private static final long serialVersionUID = -7481912314472891511L;
     private String name;
     private String description;
     private boolean done;
@@ -13,7 +16,8 @@ public class Todo {
     private String dueTime;
     private ArrayList<String> linkedContacts;
 
-    public Todo(int id, String name, String description, boolean done, boolean favorite, String dueDate, String dueTime) {
+    public Todo() {};
+    public Todo(long id, String name, String description, boolean done, boolean favorite, String dueDate, String dueTime) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -24,7 +28,8 @@ public class Todo {
         this.linkedContacts = new ArrayList<>();
     }
 
-    public int getId() { return id; }
+    public long getId() { return id; }
+
 
     public String getName() { return name; }
 
@@ -40,7 +45,7 @@ public class Todo {
 
     public ArrayList<String> getLinkedContacts() { return linkedContacts; }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(long id) { this.id = id; }
 
     public void setName(String name) { this.name = name; }
 
@@ -57,4 +62,29 @@ public class Todo {
     public void setLinkedContacts(ArrayList<String> linkedContacts) {
         this.linkedContacts = linkedContacts;
     }
+
+    public Todo updateFrom(Todo item){
+        this.setName(item.getName());
+        this.setDescription(item.getDescription());
+        this.setDone(item.isDone());
+        this.setFavorite(item.isFavorite());
+        this.setDueDate(item.getDueDate());
+        this.setDueTime(item.getDueTime());
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null || !(other instanceof Todo)) {
+            return false;
+        } else {
+            return ((Todo) other).getId() == this.getId();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "{Todo " + this.getId() + " " + this.getName() + "}";
+    }
+
 }

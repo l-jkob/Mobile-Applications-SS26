@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 
+import android.widget.Toast;
 import com.example.myapplication.R;
 import com.example.myapplication.Todo;
+import com.example.myapplication.db.LocalTodoAccessor;
+import com.example.myapplication.db.SyncEngine;
 import com.example.myapplication.ui.tododetail.TodoDetailActivity;
 
 import java.util.ArrayList;
@@ -29,6 +32,8 @@ public class TodoListActivity extends Activity {
 
     private int nextTodoId = 4;
 
+    private LocalTodoAccessor localAccessor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +44,34 @@ public class TodoListActivity extends Activity {
         sortByDateButton = findViewById(R.id.buttonSortByDate);
         favoritesFirstButton = findViewById(R.id.buttonFavoritesFirst);
 
-        createDummyTodos();
+        //createDummyTodos();
+
+        localAccessor = new LocalTodoAccessor(this);
+        todos = new ArrayList<>(localAccessor.readAllTodos());
+
+        // Start the Synchronization Engine
+        SyncEngine syncEngine = new SyncEngine(this);
+
+        // We pass in the callback to handle what happens when the background thread finishes
+        syncEngine.synchronize(new SyncEngine.SyncCallback() {
+            @Override
+            public void onSyncComplete() {
+                Toast.makeText(TodoListActivity.this, "Sync Successful!", Toast.LENGTH_SHORT).show();
+                // Refresh the screen with the new database items
+                todos.clear();
+                todos.addAll(localAccessor.readAllTodos());
+                if (adapter != null) adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onOfflineMode() {
+                Toast.makeText(TodoListActivity.this, "Offline Mode", Toast.LENGTH_LONG).show();
+                // Still load the local database items even if offline
+                todos.clear();
+                todos.addAll(localAccessor.readAllTodos());
+                if (adapter != null) adapter.notifyDataSetChanged();
+            }
+        });
 
         adapter = new TodoAdapter(this, todos);
         todoListView.setAdapter(adapter);
@@ -200,7 +232,7 @@ public class TodoListActivity extends Activity {
         }
 
         Todo newTodo = new Todo(
-                nextTodoId,
+                0, // ID 0 is fine, SQLite will auto-generate a real ID for us!
                 data.getStringExtra(TodoDetailActivity.EXTRA_NAME),
                 data.getStringExtra(TodoDetailActivity.EXTRA_DESCRIPTION),
                 data.getBooleanExtra(TodoDetailActivity.EXTRA_DONE, false),
@@ -209,12 +241,11 @@ public class TodoListActivity extends Activity {
                 data.getStringExtra(TodoDetailActivity.EXTRA_DUE_TIME)
         );
 
-        newTodo.setLinkedContacts(
-                data.getStringArrayListExtra(TodoDetailActivity.EXTRA_LINKED_CONTACTS)
-        );
+        Todo savedTodo = localAccessor.createTodo(newTodo);
 
-        nextTodoId++;
-        todos.add(newTodo);
+        todos.add(savedTodo);
+
+        pushChangesToServer();
     }
 
     private void updateExistingTodo(Intent data, int position, boolean shouldDelete) {
@@ -222,12 +253,14 @@ public class TodoListActivity extends Activity {
             return;
         }
 
+        Todo todo = todos.get(position);
+
         if (shouldDelete) {
+            localAccessor.deleteTodo(todo.getId());
             todos.remove(position);
+            pushChangesToServer();
             return;
         }
-
-        Todo todo = todos.get(position);
 
         todo.setName(data.getStringExtra(TodoDetailActivity.EXTRA_NAME));
         todo.setDescription(data.getStringExtra(TodoDetailActivity.EXTRA_DESCRIPTION));
@@ -235,8 +268,24 @@ public class TodoListActivity extends Activity {
         todo.setDueTime(data.getStringExtra(TodoDetailActivity.EXTRA_DUE_TIME));
         todo.setDone(data.getBooleanExtra(TodoDetailActivity.EXTRA_DONE, false));
         todo.setFavorite(data.getBooleanExtra(TodoDetailActivity.EXTRA_FAVORITE, false));
-        todo.setLinkedContacts(
-                data.getStringArrayListExtra(TodoDetailActivity.EXTRA_LINKED_CONTACTS)
-        );
+
+
+        localAccessor.updateTodo(todo);
+        pushChangesToServer();
+    }
+
+    private void pushChangesToServer() {
+        SyncEngine syncEngine = new SyncEngine(this);
+        syncEngine.synchronize(new SyncEngine.SyncCallback() {
+            @Override
+            public void onSyncComplete() {
+                // Silently finishes the push in the background!
+            }
+
+            @Override
+            public void onOfflineMode() {
+                // If offline, the local DB still has it safely saved.
+            }
+        });
     }
 }
